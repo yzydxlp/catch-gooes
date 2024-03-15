@@ -1,0 +1,46 @@
+{
+  "name": "catch-gooes",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@react-spring/three": "^9.7.3",
+    "@react-three/drei": "^9.101.0",
+    "@react-three/fiber": "8.15",
+    "@react-three/postprocessing": "2.6",
+    "@react-three/rapier": "^0.9.0",
+    "@types/three": "^0.162.0",
+    "gltf-pipeline": "^4.1.0",
+    "leva": "^0.9.35",
+    "r3f-perf": "6.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "three": "^0.145.0",
+    "zustand": "4.3",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
