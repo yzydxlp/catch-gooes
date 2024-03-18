@@ -23,15 +23,21 @@ const floor1Material = new THREE.MeshStandardMaterial({
   metalness: 0,
   roughness: 0,
 });
-const floor2Material = new THREE.MeshStandardMaterial({
-  color: "#222222",
-  metalness: 0,
-  roughness: 0,
-});
-const obstacleMaterial = new THREE.MeshStandardMaterial({
+
+const obstacle1Material = new THREE.MeshStandardMaterial({
   color: "teal",
   metalness: 0,
   roughness: 1,
+});
+const obstacle2Material = new THREE.MeshStandardMaterial({
+  color: "orange",
+  metalness: 0,
+  roughness: 1,
+});
+const obstacle3Material = new THREE.MeshStandardMaterial({
+  color: "#222222",
+  metalness: 0,
+  roughness: 0,
 });
 /**墙壁 */
 const wallMaterial = new THREE.MeshStandardMaterial({});
@@ -100,18 +106,50 @@ export function Bounds() {
 export function TypeBox({ position = [0, 0, 0] }) {
   return (
     <group position={position}>
-      <RigidBody position={[0, 0.3, 0]} restitution={0.2} friction={0}>
+      <RigidBody restitution={0.2} friction={0.2}>
         <mesh
           geometry={boxGeometry}
-          material={obstacleMaterial}
-          scale={[1.5, 1.5, 0.3]}
+          material={obstacle1Material}
+          scale={[1, 1, 1]}
           castShadow
         />
       </RigidBody>
     </group>
   );
 }
-export default function Env({ count = 10, types = [TypeBox], seed = 0 }) {
+export function TypeSphere({ position = [0, 0, 0] }) {
+  return (
+    <group position={position}>
+      <RigidBody restitution={0.2} friction={1} colliders="ball">
+        <mesh
+          geometry={sphereGeometry}
+          material={obstacle2Material}
+          scale={1}
+          castShadow
+        />
+      </RigidBody>
+    </group>
+  );
+}
+export function TypeCylinder({ position = [0, 0, 0] }) {
+  return (
+    <group position={position}>
+      <RigidBody restitution={0.2} friction={0.2} colliders="cuboid">
+        <mesh
+          geometry={cylinderGeometry}
+          material={obstacle3Material}
+          scale={1}
+          castShadow
+        />
+      </RigidBody>
+    </group>
+  );
+}
+export default function Env({
+  count = 20,
+  types = [TypeBox, TypeSphere, TypeCylinder],
+  seed = 0,
+}) {
   const blocks = useMemo(() => {
     const blocks = [];
     for (let i = 0; i < count; i++) {
