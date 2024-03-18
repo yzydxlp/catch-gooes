@@ -1,5 +1,19 @@
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import {
+  Selection,
+  Select,
+  EffectComposer,
+  Outline,
+} from "@react-three/postprocessing";
+import {
+  useCursor,
+  Outlines,
+  AccumulativeShadows,
+  RandomizedLight,
+  OrbitControls,
+  Environment,
+} from "@react-three/drei";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
 
 /**
@@ -103,46 +117,76 @@ export function Bounds() {
   );
 }
 
-export function TypeBox({ position = [0, 0, 0] }) {
+export function TypeBox({ position = [0, 0, 0], id }) {
+  const ref = useRef();
+  const [hovered, hover] = useState();
+  useCursor(hovered);
   return (
-    <group position={position}>
-      <RigidBody restitution={0.2} friction={0.2}>
-        <mesh
-          geometry={boxGeometry}
-          material={obstacle1Material}
-          scale={[1, 1, 1]}
-          castShadow
-        />
-      </RigidBody>
-    </group>
+    <Select enabled={hovered}>
+      <group
+        ref={ref}
+        position={position}
+        onPointerOver={(e) => (e.stopPropagation(), hover(true))}
+        onPointerOut={() => hover(false)}
+      >
+        <RigidBody restitution={0.2} friction={0.2}>
+          <mesh
+            geometry={boxGeometry}
+            material={obstacle1Material}
+            scale={[1, 1, 1]}
+            castShadow
+          />
+        </RigidBody>
+      </group>
+    </Select>
   );
 }
-export function TypeSphere({ position = [0, 0, 0] }) {
+export function TypeSphere({ position = [0, 0, 0], id }) {
+  const ref = useRef();
+  const [hovered, hover] = useState();
+  useCursor(hovered);
   return (
-    <group position={position}>
-      <RigidBody restitution={0.2} friction={1} colliders="ball">
-        <mesh
-          geometry={sphereGeometry}
-          material={obstacle2Material}
-          scale={1}
-          castShadow
-        />
-      </RigidBody>
-    </group>
+    <Select enabled={hovered}>
+      <group
+        ref={ref}
+        position={position}
+        onPointerOver={(e) => (e.stopPropagation(), hover(true))}
+        onPointerOut={() => hover(false)}
+      >
+        <RigidBody restitution={0.2} friction={1} colliders="ball">
+          <mesh
+            geometry={sphereGeometry}
+            material={obstacle2Material}
+            scale={1}
+            castShadow
+          />
+        </RigidBody>
+      </group>
+    </Select>
   );
 }
-export function TypeCylinder({ position = [0, 0, 0] }) {
+export function TypeCylinder({ position = [0, 0, 0], id }) {
+  const ref = useRef();
+  const [hovered, hover] = useState();
+  useCursor(hovered);
   return (
-    <group position={position}>
-      <RigidBody restitution={0.2} friction={0.2} colliders="cuboid">
-        <mesh
-          geometry={cylinderGeometry}
-          material={obstacle3Material}
-          scale={1}
-          castShadow
-        />
-      </RigidBody>
-    </group>
+    <Select enabled={hovered}>
+      <group
+        ref={ref}
+        position={position}
+        onPointerOver={(e) => (e.stopPropagation(), hover(true))}
+        onPointerOut={() => hover(false)}
+      >
+        <RigidBody restitution={0.2} friction={0.2} colliders="cuboid">
+          <mesh
+            geometry={cylinderGeometry}
+            material={obstacle3Material}
+            scale={1}
+            castShadow
+          />
+        </RigidBody>
+      </group>
+    </Select>
   );
 }
 export default function Env({
@@ -161,16 +205,28 @@ export default function Env({
   return (
     <>
       <Foolr position={[0, 0, 0]} />
-      {blocks.map((Block, index) => (
-        <Block
-          key={index}
-          position={[
-            (Math.random() - 0.5) * 9,
-            Math.random() + 2,
-            (Math.random() - 0.5) * 9,
-          ]}
-        />
-      ))}
+      <Selection>
+        <EffectComposer multisampling={8} autoClear={false}>
+          <Outline
+            blur
+            visibleEdgeColor="white"
+            edgeStrength={100}
+            width={1000}
+          />
+        </EffectComposer>
+        {blocks.map((Block, index) => (
+          <Block
+            key={index}
+            position={[
+              (Math.random() - 0.5) * 9,
+              Math.random() + 2,
+              (Math.random() - 0.5) * 9,
+            ]}
+            id={index}
+          />
+        ))}
+      </Selection>
+
       <Bounds />
     </>
   );
